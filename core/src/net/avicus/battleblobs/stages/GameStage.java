@@ -42,10 +42,10 @@ public class GameStage extends Stage {
         DistanceJointDef jointDef = new DistanceJointDef();
         jointDef.collideConnected = false;
         jointDef.dampingRatio = 1f;
-        jointDef.frequencyHz = 5f;
+        jointDef.frequencyHz = 3f;
 
-        int count = 50;
-        float radius = 1.5f;
+        int count = 30;
+        float radius = 3.5f;
 
         for (int i = 0; i < count; i++) {
             float angle = (float) ((2.0f * Math.PI * i) / count);
