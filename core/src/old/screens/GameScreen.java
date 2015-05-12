@@ -1,9 +1,9 @@
-package net.avicus.battleblobs.screens;
+package old.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import net.avicus.battleblobs.stages.GameStage;
+import old.stages.GameStage;
 
 public class GameScreen implements Screen {
 
@@ -15,10 +15,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //Clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //Update the stage
         stage.draw();
         stage.act(delta);
     }
