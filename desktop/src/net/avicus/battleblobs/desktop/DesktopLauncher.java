@@ -8,8 +8,8 @@ import net.avicus.battleblobs.Experiment;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.width = Constants.WIDTH;
-        config.height = Constants.HEIGHT;
+        config.width = Constants.WIDTH * 2;
+        config.height = Constants.HEIGHT * 2;
 		new LwjglApplication(new Experiment(), config);
 	}
 }
