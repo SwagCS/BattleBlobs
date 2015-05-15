@@ -11,21 +11,28 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import net.avicus.battleblobs.Experiment;
 import net.avicus.battleblobs.utils.ControlUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class Blob implements Entity {
 
-    private static float MINI_RADIUS = 0.01F;
-    private static float MINI_COUNT_PER_RADIUS = 3f;
+    private static float MINI_RADIUS = 0.025F;
+    private static float MINI_COUNT_PER_UNIT = 3.5f;
 
     private final Body center;
     private final List<Body> border;
 
-    public Blob(World world, float cx, float cy, float radius) {
+    private final Color color;
+    private final float radius;
+
+    public Blob(World world, float cx, float cy, float radius, Color color) {
+        this.radius = radius;
+        this.color = color;
+
         DistanceJointDef jointDef = new DistanceJointDef();
         jointDef.collideConnected = false;
         jointDef.dampingRatio = 1f;
@@ -33,7 +40,7 @@ public class Blob implements Entity {
 
         float circum = (float) (Math.PI * 2 * radius);
 
-        int count = (int) (circum * MINI_COUNT_PER_RADIUS);
+        int count = (int) (circum * MINI_COUNT_PER_UNIT);
 
         // Center
         {
@@ -74,11 +81,7 @@ public class Blob implements Entity {
             fd.friction = 0.5f;
             fd.restitution = 0.3f;
             body.createFixture(fd);
-
             shape.dispose();
-
-            jointDef.dampingRatio = 1f;
-            jointDef.frequencyHz = 0.1f;
 
             if (i == count - 1) {
                 Body connect = border.get(0);
@@ -92,16 +95,12 @@ public class Blob implements Entity {
                 world.createJoint(jointDef);
             }
 
-            jointDef.dampingRatio = 1f;
-            jointDef.frequencyHz = 3f;
             jointDef.initialize(center, body, center.getPosition(), body.getPosition());
             world.createJoint(jointDef);
 
             border.add(body);
         }
 
-        jointDef.dampingRatio = 1f;
-        jointDef.frequencyHz = 0.5f;
 
         // Joints
         for (int i = 0; i < border.size(); i++) {
@@ -109,7 +108,7 @@ public class Blob implements Entity {
                 Body body1 = border.get(i);
                 Body body2 = border.get(j);
 
-                if (j % 4 != 0)
+                if (j % MINI_COUNT_PER_UNIT != 0)
                     continue;
 
                 if (body1 == body2)
@@ -126,9 +125,20 @@ public class Blob implements Entity {
         Vector2 dir = ControlUtils.getArrowKeyDirection();
         dir.scl(0.1f);
 
+        if (radius == 2.5f)
+            return;
+
+        Experiment.get().stage.camera.lookAt(center.getPosition().x, center.getPosition().y, 0);
+
+        Experiment.get().stage.camera.update();
+
+        Random rand = new Random();
+
         for (Body body : border) {
+            float jiggleX = (float) ((rand.nextFloat() - 0.5f) * Math.pow(radius, 2) / 1f);
+            float jiggleY = (float) ((rand.nextFloat() - 0.5f) * Math.pow(radius, 2) / 1f);
             body.setLinearDamping(15);
-            body.applyForce(dir, body.getPosition(), true);
+            body.applyForce(dir.cpy().add(jiggleX, jiggleY), body.getPosition(), true);
         }
     }
 
@@ -139,7 +149,7 @@ public class Blob implements Entity {
         Texture textureSolid;
 
         Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pix.setColor(Color.DARK_GRAY);
+        pix.setColor(color);
         pix.fill();
         textureSolid = new Texture(pix);
 
@@ -151,14 +161,20 @@ public class Blob implements Entity {
             vertices[i * 2] = body.getPosition().x;
             vertices[i * 2 + 1] = body.getPosition().y;
 
-            triangles[i * 2] = 0;
-            triangles[i * 2 + 1] = (short) (i + 1);
-            triangles[i * 2 + 2] = (short) (i + 2);
+            // This fixes weird, 0,0 triangle issue.
+            if ((i + 2) * 2 >= vertices.length)
+                continue;
+
+            triangles[i * 3] = 0;
+            triangles[i * 3 + 1] = (short) (i + 1);
+            triangles[i * 3 + 2] = (short) (i + 2);
         }
 
         PolygonRegion polyReg = new PolygonRegion(new TextureRegion(textureSolid), vertices, triangles);
+
         poly = new PolygonSprite(polyReg);
         polyBatch = new PolygonSpriteBatch();
+        polyBatch.setProjectionMatrix(Experiment.get().stage.camera.combined);
 
         polyBatch.begin();
         poly.draw(polyBatch);

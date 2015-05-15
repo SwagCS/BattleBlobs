@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class Experiment extends Game {
 
-    private GameStage stage;
+    private static Experiment instance;
+    public GameStage stage;
 
     @Override
     public void create() {
-        stage = new GameStage();
+        instance = this;
+        this.stage = new GameStage();
     }
 
     @Override
@@ -20,6 +22,10 @@ public class Experiment extends Game {
         float delta = Gdx.graphics.getDeltaTime();
         stage.draw();
         stage.act(delta);
+    }
+
+    public static Experiment get() {
+        return instance;
     }
 
 }

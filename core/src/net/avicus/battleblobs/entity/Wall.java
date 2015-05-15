@@ -4,10 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
-import net.avicus.battleblobs.utils.ControlUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Wall implements Entity {
 
@@ -20,15 +16,15 @@ public class Wall implements Entity {
         jointDef.frequencyHz = 3f;
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.StaticBody;
+        bodyDef.type = BodyType.DynamicBody;
         bodyDef.position.set(new Vector2(cx, cy));
         CircleShape shape = new CircleShape();
-        shape.setRadius(50F);
+        shape.setRadius(0.4f);
         body = world.createBody(bodyDef);
 
         FixtureDef fd = new FixtureDef();
         fd.shape = shape;
-        fd.density = 0;
+        fd.density = 1;
         fd.friction = 0.5f;
         fd.restitution = 0.3f;
 

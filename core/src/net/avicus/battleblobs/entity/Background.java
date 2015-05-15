@@ -23,7 +23,7 @@ public class Background implements Entity {
     @Override
     public void draw() {
         batch.begin();
-        int tileCount = 20;
+        int tileCount = 50;
         batch.draw(texture, 0, 0, texture.getWidth() * tileCount, texture.getHeight() * tileCount, 0, tileCount, tileCount, 0);
         batch.end();
     }

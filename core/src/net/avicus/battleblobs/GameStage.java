@@ -1,5 +1,6 @@
 package net.avicus.battleblobs;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -16,16 +17,18 @@ public class GameStage extends Stage {
 
     public static boolean DEBUG = true;
 
-    private final World world;
-    private final List<Entity> entities = new ArrayList<Entity>();
-    private final OrthographicCamera camera;
-    private final Box2DDebugRenderer debugger;
+    public final World world;
+    public final List<Entity> entities = new ArrayList<Entity>();
+    public final OrthographicCamera camera;
+    public final Box2DDebugRenderer debugger;
 
     public GameStage() {
         world = new World(new Vector2(0, 0), true);
         entities.add(new Background());
-        //entities.add(new Wall(world, 0, 0));
-        entities.add(new Blob(world, 1, 1, 1));
+
+        entities.add(new Blob(world, 1, 1, 0.25f, Color.RED));
+        entities.add(new Blob(world, 3, 3, 2.5f, Color.CYAN));
+
         camera = createCamera();
         debugger = new Box2DDebugRenderer(true, true, true, false, false, true);
     }
