@@ -128,10 +128,13 @@ public class Blob implements Entity {
 
         if (radius == 2.5f)
             return;
-        Vector3 testVect = new Vector3(center.getPosition().x, center.getPosition().y, 0);
+
+        //THIS IS KEPT AS A REMINDER TO NOT SUCK AT PROGRAMMING
         //Experiment.get().stage.camera.lookAt(center.getPosition().x, center.getPosition().y, 0);
-        //Experiment.get().stage.camera.translate((this.center.getPosition().x - Experiment.get().stage.camera.viewportWidth/2)*.001f, (this.center.getPosition().y - Experiment.get().stage.camera.viewportHeight/2)*.001f);
-        Experiment.get().stage.camera.unproject(testVect);
+        //Experiment.get().stage.camera.translate((this.center.getPosition().x - Experiment.get().stage.camera.viewportWidth/2)*.005f, (this.center.getPosition().y - Experiment.get().stage.camera.viewportHeight/2)*.005f);
+
+
+        Experiment.get().stage.camera.position.set(this.center.getPosition().x,this.center.getPosition().y, 0f);
         Experiment.get().stage.camera.update();
 
         Random rand = new Random();
