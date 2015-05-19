@@ -45,6 +45,8 @@ public class GameStage extends Stage {
         world.step(1.0F / 300.0F, 6, 2);
         for (Entity e : entities)
             e.act(delta);
+        Blob player = (Blob) entities.get(1);
+        camera.zoom = player.getRadius()*2f;
     }
 
     @Override

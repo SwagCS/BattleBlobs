@@ -185,4 +185,8 @@ public class Blob implements Entity {
         poly.draw(polyBatch);
         polyBatch.end();
     }
+    public float getRadius(){
+
+        return radius;
+    }
 }
