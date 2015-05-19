@@ -17,6 +17,8 @@ public class GameStage extends Stage {
 
     public static boolean DEBUG = true;
 
+    public static float deltaX;
+
     public final World world;
     public final List<Entity> entities = new ArrayList<Entity>();
     public final OrthographicCamera camera;
@@ -26,7 +28,7 @@ public class GameStage extends Stage {
         world = new World(new Vector2(0, 0), true);
         entities.add(new Background());
 
-        entities.add(new Blob(world, 1, 1, 0.25f, Color.RED));
+        entities.add(new Blob(world, 1, 1, .5f, Color.RED));
         entities.add(new Blob(world, 3, 3, 2.5f, Color.CYAN));
 
         camera = createCamera();

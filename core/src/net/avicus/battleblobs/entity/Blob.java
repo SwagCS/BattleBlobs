@@ -124,7 +124,7 @@ public class Blob implements Entity {
     @Override
     public void act(float delta) {
         Vector2 dir = ControlUtils.getArrowKeyDirection();
-        dir.scl(0.1f);
+        dir.scl(.1f/radius);
 
         if (radius == 2.5f)
             return;
