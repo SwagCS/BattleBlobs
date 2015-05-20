@@ -15,9 +15,7 @@ import java.util.List;
 
 public class GameStage extends Stage {
 
-    public static boolean DEBUG = true;
-
-    public static float deltaX;
+    public static boolean DEBUG = false;
 
     public final World world;
     public final List<Entity> entities = new ArrayList<Entity>();
@@ -29,7 +27,7 @@ public class GameStage extends Stage {
         entities.add(new Background());
 
         entities.add(new Blob(world, 1, 1, .5f, Color.RED));
-        entities.add(new Blob(world, 3, 3, 2.5f, Color.CYAN));
+        entities.add(new Blob(world, 3, 3, 2.5f, Color.BLUE));
 
         camera = createCamera();
         debugger = new Box2DDebugRenderer(true, true, true, false, false, true);

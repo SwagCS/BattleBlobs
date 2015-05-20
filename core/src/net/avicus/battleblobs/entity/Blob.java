@@ -16,11 +16,10 @@ import net.avicus.battleblobs.utils.ControlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Blob implements Entity {
 
-    private static float MINI_RADIUS = 0.025F;
+    private static float MINI_RADIUS = 0.015F;
     private static float MINI_COUNT_PER_UNIT = 3.5f;
 
     private final Body center;
@@ -123,26 +122,22 @@ public class Blob implements Entity {
     @Override
     public void act(float delta) {
         Vector2 dir = ControlUtils.getArrowKeyDirection();
-        dir.scl(.1f/radius);
+        dir.scl(0.3f);
 
         if (radius == 2.5f)
             return;
 
-        //THIS IS KEPT AS A REMINDER TO NOT SUCK AT PROGRAMMING
-        //Experiment.get().stage.camera.lookAt(center.getPosition().x, center.getPosition().y, 0);
-        //Experiment.get().stage.camera.translate((this.center.getPosition().x - Experiment.get().stage.camera.viewportWidth/2)*.005f, (this.center.getPosition().y - Experiment.get().stage.camera.viewportHeight/2)*.005f);
-
-
         BattleBlobs.get().stage.camera.position.set(this.center.getPosition().x,this.center.getPosition().y, 0f);
         BattleBlobs.get().stage.camera.update();
 
-        Random rand = new Random();
 
+        center.setLinearDamping(15);
+        center.applyForce(dir, center.getPosition(), true);
         for (Body body : border) {
-            float jiggleX = (float) ((rand.nextFloat() - 0.5f) * Math.pow(radius, 2) / 1f);
-            float jiggleY = (float) ((rand.nextFloat() - 0.5f) * Math.pow(radius, 2) / 1f);
+            //float jiggleX = (float) ((rand.nextFloat() - 0.5f) / 1f);
+            //float jiggleY = (float) ((rand.nextFloat() - 0.5f) / 1f);
             body.setLinearDamping(15);
-            body.applyForce(dir.cpy().add(jiggleX, jiggleY), body.getPosition(), true);
+            body.applyForce(dir, body.getPosition(), true);
         }
     }
 
@@ -184,8 +179,8 @@ public class Blob implements Entity {
         poly.draw(polyBatch);
         polyBatch.end();
     }
-    public float getRadius(){
-
+    
+    public float getRadius() {
         return radius;
     }
 }
