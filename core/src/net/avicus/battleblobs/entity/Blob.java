@@ -31,7 +31,6 @@ public class Blob implements Entity {
     public Blob(World world, float cx, float cy, float radius, Color color) {
         this.radius = radius;
         this.color = color;
-
         DistanceJointDef jointDef = new DistanceJointDef();
         jointDef.collideConnected = false;
         jointDef.dampingRatio = 1f;
@@ -39,7 +38,7 @@ public class Blob implements Entity {
 
         float circum = (float) (Math.PI * 2 * radius);
 
-        int count = (int) (circum * MINI_COUNT_PER_UNIT);
+        int count = (int) (circum * 2.44 * Math.pow(radius, -0.945));
 
         // Center
         {
@@ -47,7 +46,7 @@ public class Blob implements Entity {
             bodyDef.type = BodyType.DynamicBody;
             bodyDef.position.set(new Vector2(cx, cy));
             CircleShape shape = new CircleShape();
-            shape.setRadius(0.01F);
+            shape.setRadius(MINI_RADIUS);
             center = world.createBody(bodyDef);
 
             FixtureDef fd = new FixtureDef();
