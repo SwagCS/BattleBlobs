@@ -8,11 +8,10 @@ import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
-import net.avicus.battleblobs.Experiment;
+import net.avicus.battleblobs.BattleBlobs;
 import net.avicus.battleblobs.utils.ControlUtils;
 
 import java.util.ArrayList;
@@ -134,8 +133,8 @@ public class Blob implements Entity {
         //Experiment.get().stage.camera.translate((this.center.getPosition().x - Experiment.get().stage.camera.viewportWidth/2)*.005f, (this.center.getPosition().y - Experiment.get().stage.camera.viewportHeight/2)*.005f);
 
 
-        Experiment.get().stage.camera.position.set(this.center.getPosition().x,this.center.getPosition().y, 0f);
-        Experiment.get().stage.camera.update();
+        BattleBlobs.get().stage.camera.position.set(this.center.getPosition().x,this.center.getPosition().y, 0f);
+        BattleBlobs.get().stage.camera.update();
 
         Random rand = new Random();
 
@@ -179,7 +178,7 @@ public class Blob implements Entity {
 
         poly = new PolygonSprite(polyReg);
         polyBatch = new PolygonSpriteBatch();
-        polyBatch.setProjectionMatrix(Experiment.get().stage.camera.combined);
+        polyBatch.setProjectionMatrix(BattleBlobs.get().stage.camera.combined);
 
         polyBatch.begin();
         poly.draw(polyBatch);

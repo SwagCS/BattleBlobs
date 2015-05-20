@@ -4,9 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 
-public class Experiment extends Game {
+public class BattleBlobs extends Game {
 
-    private static Experiment instance;
+    private static BattleBlobs instance;
     public GameStage stage;
 
     @Override
@@ -24,7 +24,7 @@ public class Experiment extends Game {
         stage.act(delta);
     }
 
-    public static Experiment get() {
+    public static BattleBlobs get() {
         return instance;
     }
 

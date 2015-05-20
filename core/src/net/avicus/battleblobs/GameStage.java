@@ -35,6 +35,14 @@ public class GameStage extends Stage {
         debugger = new Box2DDebugRenderer(true, true, true, false, false, true);
     }
 
+    public float ppuX() {
+        return getWidth() / 16f;
+    }
+
+    public float ppuY() {
+        return getHeight() / 9f;
+    }
+
     private OrthographicCamera createCamera() {
         OrthographicCamera camera = new OrthographicCamera(16, 9);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f);
