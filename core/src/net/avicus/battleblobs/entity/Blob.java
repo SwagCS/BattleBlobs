@@ -19,8 +19,8 @@ import java.util.List;
 
 public class Blob implements Entity {
 
-    private static float MINI_RADIUS = 0.015F;
-    private static float MINI_COUNT_PER_UNIT = 3.5f;
+    private static float MINI_RADIUS = 0.03F;
+    private static float MINI_COUNT_PER_UNIT = 10f;
 
     private final Body center;
     private final List<Body> border;
