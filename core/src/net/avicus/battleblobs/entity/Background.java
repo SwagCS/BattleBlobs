@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import net.avicus.battleblobs.BattleBlobs;
 import net.avicus.battleblobs.Battlefield;
 
@@ -40,6 +41,11 @@ public class Background extends Entity {
         // ba-da-bing ba-da-boom.
         batch.draw(texture, -16f, -9f, tileW * tileCount, tileH * tileCount, 0, tileCount, tileCount, 0);
         batch.end();
+    }
+
+    @Override
+    public Vector2 getPosition() {
+        return null;
     }
 
 }

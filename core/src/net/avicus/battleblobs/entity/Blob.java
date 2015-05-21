@@ -126,6 +126,25 @@ public class Blob extends Entity {
 
     @Override
     public void act(float delta) {
+        for (int i = 0; i < battlefield.entities.size(); i++) {
+            Entity e1 = battlefield.entities.get(i);
+
+            if (!(e1 instanceof Blob))
+                continue;
+
+            for (int i2 = 0; i2 < battlefield.entities.size(); i2++) {
+                Entity e2 = battlefield.entities.get(i2);
+
+                if (!(e2 instanceof Blob))
+                    continue;
+
+                Blob b1 = (Blob) e1;
+                Blob b2 = (Blob) e2;
+
+
+            }
+        }
+
         Vector2 dir = ControlUtils.getArrowKeyDirection();
         dir.scl(0.3f);
 

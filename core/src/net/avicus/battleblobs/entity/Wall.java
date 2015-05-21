@@ -47,4 +47,10 @@ public class Wall extends Entity {
     public void draw() {
 
     }
+
+    @Override
+    public Vector2 getPosition() {
+        return body.getPosition();
+    }
+
 }
