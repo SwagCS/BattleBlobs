@@ -13,20 +13,21 @@ import net.avicus.battleblobs.entity.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameStage extends Stage {
+public class Battlefield extends Stage {
 
     public static boolean DEBUG = true;
+
     public final World world;
     public final List<Entity> entities = new ArrayList<Entity>();
     public final OrthographicCamera camera;
     public final Box2DDebugRenderer debugger;
 
-    public GameStage() {
+    public Battlefield() {
         world = new World(new Vector2(0, 0), true);
-        entities.add(new Background());
+        entities.add(new Background(this));
 
-        entities.add(new Blob(world, 1, 1, .6f, Color.RED));
-        entities.add(new Blob(world, 3, 3, 2.5f, Color.BLUE));
+        entities.add(new Blob(this, 1, 1, .6f, Color.RED));
+        entities.add(new Blob(this, 3, 3, 2.5f, Color.BLUE));
 
         camera = createCamera();
         debugger = new Box2DDebugRenderer(true, true, true, false, false, true);
@@ -52,12 +53,13 @@ public class GameStage extends Stage {
         world.step(1.0F / 300.0F, 6, 2);
         for (Entity e : entities)
             e.act(delta);
+
         Blob player = (Blob) entities.get(1);
-        if (player.getRadius() >1){
-        camera.zoom = (float) Math.sqrt((Math.sqrt(player.getRadius())))*2f;
-    }   else{
-            camera.zoom = player.getRadius()*2f;
-        }
+
+        if (player.getRadius() > 1)
+            camera.zoom = (float) Math.sqrt((Math.sqrt(player.getRadius()))) * 2f;
+        else
+            camera.zoom = player.getRadius() * 2f;
     }
 
     @Override

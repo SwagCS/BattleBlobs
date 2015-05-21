@@ -5,13 +5,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import net.avicus.battleblobs.BattleBlobs;
+import net.avicus.battleblobs.Battlefield;
 
-public class Background implements Entity {
+public class Background extends Entity {
 
     private Texture texture;
     private SpriteBatch batch;
 
-    public Background() {
+    public Background(Battlefield battlefield) {
+        super(battlefield);
+
         texture = new Texture(Gdx.files.internal("grid.png"));
         texture.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
         batch = new SpriteBatch();

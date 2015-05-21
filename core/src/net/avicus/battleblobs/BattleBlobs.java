@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.GL20;
 public class BattleBlobs extends Game {
 
     private static BattleBlobs instance;
-    public GameStage stage;
+    public Battlefield stage;
 
     @Override
     public void create() {
         instance = this;
-        this.stage = new GameStage();
+        this.stage = new Battlefield();
     }
 
     @Override

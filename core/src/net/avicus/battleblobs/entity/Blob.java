@@ -8,16 +8,20 @@ import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import net.avicus.battleblobs.BattleBlobs;
+import net.avicus.battleblobs.Battlefield;
 import net.avicus.battleblobs.utils.ControlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Blob implements Entity {
+public class Blob extends Entity {
 
     private static float MINI_RADIUS = 0.03F;
     private static float MINI_COUNT_PER_UNIT = 10f;
@@ -28,7 +32,9 @@ public class Blob implements Entity {
     private final Color color;
     private final float radius;
 
-    public Blob(World world, float cx, float cy, float radius, Color color) {
+    public Blob(Battlefield battlefield, float cx, float cy, float radius, Color color) {
+        super(battlefield);
+
         this.radius = radius;
         this.color = color;
         DistanceJointDef jointDef = new DistanceJointDef();
