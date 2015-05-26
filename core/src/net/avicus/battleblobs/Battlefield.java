@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import net.avicus.battleblobs.entity.Background;
 import net.avicus.battleblobs.entity.Blob;
 import net.avicus.battleblobs.entity.Entity;
+import net.avicus.battleblobs.entity.UI;
 import net.avicus.battleblobs.utils.ControlUtils;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class Battlefield extends Stage {
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
 
     public final World world;
     public final OrthographicCamera camera;
@@ -32,10 +33,11 @@ public class Battlefield extends Stage {
         world = new World(new Vector2(0, 0), true);
         entities.add(new Background(this));
 
-        player = new Blob(this, 1, 1, 30f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1));
+        player = new Blob(this, 1, 1, 0.3f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1));
 
         entities.add(player);
-        entities.add(new Blob(this, 3, 3, 15f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
+        entities.add(new Blob(this, 3, 3, 0.01f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
+        entities.add(new UI(this));
 
         camera = createCamera();
         debugger = new Box2DDebugRenderer(true, true, true, false, false, true);
@@ -59,8 +61,8 @@ public class Battlefield extends Stage {
     @Override
     public void act(float delta) {
         world.step(1.0F / 300.0F, 6, 2);
-        for (Entity e : entities)
-            e.act(delta);
+        for (int i = 0; i < entities.size(); i++)
+            entities.get(i).act(delta);
 
         Vector2 dir = ControlUtils.getArrowKeyDirection();
         dir.scl(0.1f);

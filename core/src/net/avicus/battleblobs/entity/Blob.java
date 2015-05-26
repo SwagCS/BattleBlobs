@@ -8,11 +8,8 @@ import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import net.avicus.battleblobs.BattleBlobs;
 import net.avicus.battleblobs.Battlefield;
@@ -25,8 +22,8 @@ public class Blob extends Entity {
     private static float MINI_RADIUS = 0.01f;
     private static float MINI_COUNT_PER_UNIT = 10f;
 
-    public final Body center;
-    public final List<Body> border;
+    public Body center;
+    public List<Body> border = new ArrayList<Body>();
 
     public final Color color;
     public float volume;
@@ -36,6 +33,11 @@ public class Blob extends Entity {
 
         this.volume = volume;
         this.color = color;
+
+        make(cx, cy);
+    }
+
+    public void make(float cx, float cy) {
         DistanceJointDef jointDef = new DistanceJointDef();
         jointDef.collideConnected = false;
         jointDef.dampingRatio = 1f;
@@ -43,7 +45,7 @@ public class Blob extends Entity {
 
         float circum = (float) (Math.PI * 2 * radius());
 
-        int count = (int) (circum * 4 * Math.pow(radius(), -0.5));
+        int count = (int) (circum * 4 * Math.pow(radius(), -0.2));
 
         // Center
         {
@@ -123,36 +125,40 @@ public class Blob extends Entity {
         }
     }
 
+    public void destroy() {
+        if (center != null)
+            world.destroyBody(center);
+        for (Body body : border)
+            world.destroyBody(body);
+    }
+
     @Override
     public void act(float delta) {
         center.setLinearDamping(15);
         for (Body body : border)
             body.setLinearDamping(15);
 
-        for (int i = 0; i < battlefield.entities.size(); i++) {
-            Entity keenanIsLife = battlefield.entities.get(i);
+        float radius = radius();
 
-            if (!(keenanIsLife instanceof Blob))
+        for (int i = 0; i < battlefield.entities.size(); i++) {
+            Entity target = battlefield.entities.get(i);
+
+            if (!(target instanceof Blob))
                 continue;
 
-            for (int i2 = 0; i2 < battlefield.entities.size(); i2++) {
-                Entity keenanIsLove = battlefield.entities.get(i2);
+            if (this == target)
+                continue;
 
-                if (!(keenanIsLove instanceof Blob))
-                    continue;
 
-                Blob b1 = (Blob) keenanIsLife;
-                Blob b2 = (Blob) keenanIsLove;
+            Blob blob = (Blob) target;
+            double dist = distance(blob);
 
-                if (b1 == b2)
-                    continue;
-
-                double d = b1.distance(b2);
-
-                if (d < b1.radius()) {
-                    b1.volume += b2.volume;
-                    battlefield.entities.remove(i2);
-                }
+            if (dist < radius) {
+                volume += blob.volume;
+                battlefield.entities.remove(blob);
+                destroy();
+                make(center.getPosition().x, center.getPosition().y);
+                blob.destroy();
             }
         }
     }
