@@ -16,35 +16,34 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import net.avicus.battleblobs.BattleBlobs;
 import net.avicus.battleblobs.Battlefield;
-import net.avicus.battleblobs.utils.ControlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Blob extends Entity {
 
-    private static float MINI_RADIUS = 0.03F;
+    private static float MINI_RADIUS = 0.01f;
     private static float MINI_COUNT_PER_UNIT = 10f;
 
-    private final Body center;
-    private final List<Body> border;
+    public final Body center;
+    public final List<Body> border;
 
-    private final Color color;
-    private final float radius;
+    public final Color color;
+    public float volume;
 
-    public Blob(Battlefield battlefield, float cx, float cy, float radius, Color color) {
+    public Blob(Battlefield battlefield, float cx, float cy, float volume, Color color) {
         super(battlefield);
 
-        this.radius = radius;
+        this.volume = volume;
         this.color = color;
         DistanceJointDef jointDef = new DistanceJointDef();
         jointDef.collideConnected = false;
         jointDef.dampingRatio = 1f;
         jointDef.frequencyHz = 3f;
 
-        float circum = (float) (Math.PI * 2 * radius);
+        float circum = (float) (Math.PI * 2 * radius());
 
-        int count = (int) (circum * 2.44 * Math.pow(radius, -0.945));
+        int count = (int) (circum * 4 * Math.pow(radius(), -0.5));
 
         // Center
         {
@@ -70,8 +69,8 @@ public class Blob extends Entity {
 
         for (int i = 0; i < count; i++) {
             float angle = (float) ((2.0f * Math.PI * i) / count);
-            float x = (float) (cx + radius * Math.sin(angle));
-            float y = (float) (cy + radius * Math.cos(angle));
+            float x = (float) (cx + radius() * Math.sin(angle));
+            float y = (float) (cy + radius() * Math.cos(angle));
 
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyType.DynamicBody;
@@ -126,42 +125,35 @@ public class Blob extends Entity {
 
     @Override
     public void act(float delta) {
-        for (int i = 0; i < battlefield.entities.size(); i++) {
-            Entity Keenanismean1 = battlefield.entities.get(i);
+        center.setLinearDamping(15);
+        for (Body body : border)
+            body.setLinearDamping(15);
 
-            if (!(Keenanismean1 instanceof Blob))
+        for (int i = 0; i < battlefield.entities.size(); i++) {
+            Entity keenanIsLife = battlefield.entities.get(i);
+
+            if (!(keenanIsLife instanceof Blob))
                 continue;
 
             for (int i2 = 0; i2 < battlefield.entities.size(); i2++) {
-                Entity Keenanismean2 = battlefield.entities.get(i2);
+                Entity keenanIsLove = battlefield.entities.get(i2);
 
-                if (!(Keenanismean2 instanceof Blob))
+                if (!(keenanIsLove instanceof Blob))
                     continue;
 
-                Blob b1 = (Blob) Keenanismean1;
-                Blob b2 = (Blob) Keenanismean2;
+                Blob b1 = (Blob) keenanIsLife;
+                Blob b2 = (Blob) keenanIsLove;
 
+                if (b1 == b2)
+                    continue;
 
+                double d = b1.distance(b2);
+
+                if (d < b1.radius()) {
+                    b1.volume += b2.volume;
+                    battlefield.entities.remove(i2);
+                }
             }
-        }
-
-        Vector2 dir = ControlUtils.getArrowKeyDirection();
-        dir.scl(0.3f);
-
-        if (radius == 2.5f)
-            return;
-
-        BattleBlobs.get().stage.camera.position.set(this.center.getPosition().x,this.center.getPosition().y, 0f);
-        BattleBlobs.get().stage.camera.update();
-
-
-        center.setLinearDamping(15);
-        center.applyForce(dir, center.getPosition(), true);
-        for (Body body : border) {
-            //float jiggleX = (float) ((rand.nextFloat() - 0.5f) / 1f);
-            //float jiggleY = (float) ((rand.nextFloat() - 0.5f) / 1f);
-            body.setLinearDamping(15);
-            body.applyForce(dir, body.getPosition(), true);
         }
     }
 
@@ -203,8 +195,19 @@ public class Blob extends Entity {
         poly.draw(polyBatch);
         polyBatch.end();
     }
-    
-    public float getRadius() {
-        return radius;
+
+    @Override
+    public Vector2 getPosition() {
+        return center.getPosition();
     }
+
+    public float radius() {
+        return (float) Math.pow(volume / (1.3333 * 3.1416), 0.3333);
+    }
+
+    @Override
+    public int drawPriority() {
+        return (int) volume * 1000;
+    }
+
 }

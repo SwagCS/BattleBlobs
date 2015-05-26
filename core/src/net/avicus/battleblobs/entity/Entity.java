@@ -15,11 +15,11 @@ public abstract class Entity {
     }
 
     public float distance(Entity entity) {
-        return entity.getPosition().dst(entity.getPosition());
+        return getPosition().dst(entity.getPosition());
     }
 
     public float distanceSquared(Entity entity) {
-        return entity.getPosition().dst2(entity.getPosition());
+        return getPosition().dst2(entity.getPosition());
     }
 
     public abstract void act(float delta);
@@ -27,5 +27,9 @@ public abstract class Entity {
     public abstract void draw();
 
     public abstract Vector2 getPosition();
+
+    public int drawPriority() {
+        return 0;
+    }
 
 }

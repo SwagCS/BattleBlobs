@@ -3,31 +3,39 @@ package net.avicus.battleblobs;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import net.avicus.battleblobs.entity.Background;
 import net.avicus.battleblobs.entity.Blob;
 import net.avicus.battleblobs.entity.Entity;
+import net.avicus.battleblobs.utils.ControlUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Battlefield extends Stage {
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     public final World world;
-    public final List<Entity> entities = new ArrayList<Entity>();
     public final OrthographicCamera camera;
     public final Box2DDebugRenderer debugger;
+
+    public final List<Entity> entities = new ArrayList<Entity>();
+    public final Blob player;
 
     public Battlefield() {
         world = new World(new Vector2(0, 0), true);
         entities.add(new Background(this));
 
-        entities.add(new Blob(this, 1, 1, .6f, Color.RED));
-        entities.add(new Blob(this, 3, 3, 2.5f, Color.BLUE));
+        player = new Blob(this, 1, 1, 30f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1));
+
+        entities.add(player);
+        entities.add(new Blob(this, 3, 3, 15f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
 
         camera = createCamera();
         debugger = new Box2DDebugRenderer(true, true, true, false, false, true);
@@ -54,19 +62,35 @@ public class Battlefield extends Stage {
         for (Entity e : entities)
             e.act(delta);
 
-        Blob player = (Blob) entities.get(1);
+        Vector2 dir = ControlUtils.getArrowKeyDirection();
+        dir.scl(0.1f);
 
-        if (player.getRadius() > 1)
-            camera.zoom = (float) Math.sqrt((Math.sqrt(player.getRadius()))) * 2f;
+        player.center.applyForce(dir, player.center.getPosition(), true);
+        for (Body body : player.border)
+            body.applyForce(dir, body.getPosition(), true);
+
+        camera.position.set(player.getPosition().x, player.getPosition().y, 0f);
+        camera.update();
+
+        if (player.radius() > 1)
+            camera.zoom = (float) Math.sqrt((Math.sqrt(player.radius()))) * 2f;
         else
-            camera.zoom = player.getRadius() * 2f;
+            camera.zoom = player.radius() * 2f;
     }
 
     @Override
     public void draw() {
         super.draw();
-        for (Entity e : entities)
-            e.draw();
+        List<Entity> list = new ArrayList<Entity>();
+        list.addAll(entities);
+        Collections.sort(list, new Comparator<Entity>() {
+            @Override
+            public int compare(Entity o1, Entity o2) {
+                return o1.drawPriority() - o2.drawPriority();
+            }
+        });
+        for (Entity entity : list)
+            entity.draw();
         if (DEBUG)
             debugger.render(world, camera.combined);
     }
