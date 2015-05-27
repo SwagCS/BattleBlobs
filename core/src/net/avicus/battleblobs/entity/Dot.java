@@ -37,10 +37,10 @@ public class Dot extends Blob {
 
     public Dot(Battlefield battlefield, float cx, float cy, float volume, Color color) {
         super(battlefield, cx, cy, volume, color);
-
+        this.destroy();
         this.volume = volume;
         this.color = color;
-
+        make(cx,cy);
 
     }
 
