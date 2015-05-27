@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by Alex on 5/27/2015.
  */
-public class Dot extends Entity {
+public class Dot extends Blob {
 
     private static float MINI_RADIUS = 0.01f;
     private static float MINI_COUNT_PER_UNIT = 10f;
@@ -34,13 +34,14 @@ public class Dot extends Entity {
     public final Color color;
     public float volume;
 
+
     public Dot(Battlefield battlefield, float cx, float cy, float volume, Color color) {
-        super(battlefield);
+        super(battlefield, cx, cy, volume, color);
 
         this.volume = volume;
         this.color = color;
 
-        make(cx, cy);
+
     }
 
     public void make(float cx, float cy) {

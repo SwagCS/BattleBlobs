@@ -24,6 +24,8 @@ public class Battlefield extends Stage {
     public final List<Entity> entities = new ArrayList<Entity>();
     public final Blob player;
 
+    private Random rand = new Random();
+
     public Battlefield() {
         world = new World(new Vector2(0, 0), true);
         entities.add(new Background(this));
@@ -37,7 +39,7 @@ public class Battlefield extends Stage {
         time.scheduleTask(new Timer.Task(){
             @Override
         public void run(){
-                entities.add (new Dot(Battlefield.this, 5,5, 0.01f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
+                entities.add (new Dot(Battlefield.this, rand.nextInt(30)-15,rand.nextInt(30)-15, 0.01f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
 
             }
         }, 1, 1);
