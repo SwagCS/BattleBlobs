@@ -7,16 +7,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import net.avicus.battleblobs.entity.Background;
-import net.avicus.battleblobs.entity.Blob;
-import net.avicus.battleblobs.entity.Entity;
-import net.avicus.battleblobs.entity.UI;
+import com.badlogic.gdx.utils.Timer;
+import net.avicus.battleblobs.entity.*;
 import net.avicus.battleblobs.utils.ControlUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Battlefield extends Stage {
 
@@ -38,6 +33,15 @@ public class Battlefield extends Stage {
         entities.add(player);
         entities.add(new Blob(this, 3, 3, 0.01f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
         entities.add(new UI(this));
+        Timer time = new Timer();
+        time.scheduleTask(new Timer.Task(){
+            @Override
+        public void run(){
+                entities.add (new Dot(Battlefield.this, 5,5, 0.01f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
+
+            }
+        }, 1, 1);
+
 
         camera = createCamera();
         debugger = new Box2DDebugRenderer(true, true, true, false, false, true);
