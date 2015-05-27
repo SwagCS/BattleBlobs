@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import net.avicus.battleblobs.BattleBlobs;
 import net.avicus.battleblobs.Battlefield;
+import net.avicus.battleblobs.utils.ControlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,6 +160,16 @@ public class Blob extends Entity {
                 destroy();
                 make(center.getPosition().x, center.getPosition().y);
                 blob.destroy();
+
+                Vector2 dir = ControlUtils.getArrowKeyDirection();
+                //So change this thing to modify how much you slow down/speed up when eating something
+                //Using my incredible 3 sample size and tablet stopwatch scaling it by 1f did not affect the speed
+                dir.scl(1f);
+                center.applyForce(dir, center.getPosition(), true);
+                //Applies the force to every border thingy so the center doesn't fly out somewhere and leave the body behind
+                for(int test = 0; test < border.size(); test++) {
+                    border.get(test).applyForce(dir, border.get(test).getPosition(), true);
+                }
             }
         }
     }
