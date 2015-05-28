@@ -1,11 +1,8 @@
 package net.avicus.battleblobs.entity;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import net.avicus.battleblobs.Battlefield;
 
@@ -22,10 +19,10 @@ public class Wall extends Entity {
         jointDef.frequencyHz = 3f;
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.DynamicBody;
+        bodyDef.type = BodyType.StaticBody;
         bodyDef.position.set(new Vector2(cx, cy));
-        CircleShape shape = new CircleShape();
-        shape.setRadius(0.4f);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(10, 10);
         body = world.createBody(bodyDef);
 
         FixtureDef fd = new FixtureDef();

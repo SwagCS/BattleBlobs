@@ -27,7 +27,7 @@ public class UI extends Entity {
     public void draw() {
         batch.begin();
         font.setColor(1, 153f/255f, 51f/255f, 1);
-        font.draw(batch, "Score: " + (int) (battlefield.player.area * 100), 23, 40);
+        font.draw(batch, "Score: " + (int) (battlefield.player.area() * 100), 23, 40);
         batch.end();
     }
 
