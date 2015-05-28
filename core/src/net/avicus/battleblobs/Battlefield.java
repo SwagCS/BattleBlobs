@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Timer;
 import net.avicus.battleblobs.entity.*;
 import net.avicus.battleblobs.utils.ControlUtils;
 
@@ -24,29 +23,30 @@ public class Battlefield extends Stage {
     public final List<Entity> entities = new ArrayList<Entity>();
     public final Blob player;
 
-    private Random rand = new Random();
-
-    public Battlefield() {
+    public Battlefield(float width, float height) {
         world = new World(new Vector2(0, 0), true);
-        entities.add(new Background(this));
+        camera = createCamera();
+        debugger = new Box2DDebugRenderer(true, true, true, false, false, true);
+
+
+        entities.add(new Background(this, width, height));
 
         player = new Blob(this, 1, 1, 0.3f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1));
 
         entities.add(player);
         entities.add(new Blob(this, 3, 3, 0.01f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
         entities.add(new UI(this));
-        Timer time = new Timer();
-        time.scheduleTask(new Timer.Task(){
-            @Override
-        public void run(){
-                entities.add (new Dot(Battlefield.this, rand.nextInt(30)-15,rand.nextInt(30)-15, 0.01f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
-
-            }
-        }, 1, 1);
 
 
-        camera = createCamera();
-        debugger = new Box2DDebugRenderer(true, true, true, false, false, true);
+        Random rand = new Random();
+
+        int dots = 5;
+
+        for (int i = 0; i < dots; i++)
+            entities.add(new Dot(this, rand.nextInt(3), rand.nextInt(3), new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
+
+
+
     }
 
     public float ppuX() {
@@ -79,16 +79,17 @@ public class Battlefield extends Stage {
 
         camera.position.set(player.getPosition().x, player.getPosition().y, 0f);
         camera.update();
-
-        if (player.radius() > 1)
-            camera.zoom = (float) Math.sqrt((Math.sqrt(player.radius()))) * 2f;
-        else
-            camera.zoom = player.radius() * 2f;
     }
 
     @Override
     public void draw() {
         super.draw();
+
+        if (player.radius() > 1)
+            camera.zoom = (float) Math.sqrt((Math.sqrt(player.radius()))) * 1.5f;
+        else
+            camera.zoom = player.radius() * 1.5f;
+
         List<Entity> list = new ArrayList<Entity>();
         list.addAll(entities);
         Collections.sort(list, new Comparator<Entity>() {

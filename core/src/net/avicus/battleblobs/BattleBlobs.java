@@ -12,7 +12,7 @@ public class BattleBlobs extends Game {
     @Override
     public void create() {
         instance = this;
-        this.stage = new Battlefield();
+        this.stage = new Battlefield(50, 50);
     }
 
     @Override

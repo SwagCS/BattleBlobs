@@ -12,9 +12,13 @@ public class Background extends Entity {
 
     private Texture texture;
     private SpriteBatch batch;
+    private float width;
+    private float height;
 
-    public Background(Battlefield battlefield) {
+    public Background(Battlefield battlefield, float width, float height) {
         super(battlefield);
+        this.width = width;
+        this.height = height;
 
         texture = new Texture(Gdx.files.internal("grid.png"));
         texture.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
@@ -29,17 +33,16 @@ public class Background extends Entity {
     @Override
     public void draw() {
         batch.begin();
-        int tileCount = 50;
 
         // This is how we roll
         batch.setProjectionMatrix(BattleBlobs.get().stage.camera.combined);
 
         // pixels per unit
-        float tileW = texture.getWidth() / BattleBlobs.get().stage.ppuX();
-        float tileH = texture.getHeight() / BattleBlobs.get().stage.ppuY();
+        float tileW = texture.getWidth() / battlefield.ppuX();
+        float tileH = texture.getHeight() / battlefield.ppuY();
 
         // ba-da-bing ba-da-boom.
-        batch.draw(texture, -16f, -9f, tileW * tileCount, tileH * tileCount, 0, tileCount, tileCount, 0);
+        batch.draw(texture, 0, 0, tileW * width, tileH * height, 0, width, height, 0);
         batch.end();
     }
 

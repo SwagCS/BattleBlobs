@@ -8,12 +8,13 @@ import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
-import net.avicus.battleblobs.BattleBlobs;
 import net.avicus.battleblobs.Battlefield;
-import net.avicus.battleblobs.utils.ControlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +28,16 @@ public class Blob extends Entity {
     public List<Body> border = new ArrayList<Body>();
 
     public final Color color;
-    public float volume;
+    public float area;
 
-    public Blob(Battlefield battlefield, float cx, float cy, float volume, Color color) {
+    private PolygonSprite poly;
+    private PolygonSpriteBatch polyBatch;
+    private Texture textureSolid;
+
+    public Blob(Battlefield battlefield, float cx, float cy, float area, Color color) {
         super(battlefield);
 
-        this.volume = volume;
+        this.area = area;
         this.color = color;
 
         make(cx, cy);
@@ -124,6 +129,13 @@ public class Blob extends Entity {
                 world.createJoint(jointDef);
             }
         }
+
+        Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pix.setColor(color);
+        pix.fill();
+        textureSolid = new Texture(pix);
+
+        polyBatch = new PolygonSpriteBatch();
     }
 
     public void destroy() {
@@ -154,35 +166,26 @@ public class Blob extends Entity {
             Blob blob = (Blob) target;
             double dist = distance(blob);
 
+
             if (dist < radius) {
-                Vector2 dir1 = this.center.getLinearVelocity();
-                volume += blob.volume;
+                Vector2 velocity = center.getLinearVelocity();
+
+                blob.destroy();
                 battlefield.entities.remove(blob);
+
+                area += blob.area;
                 destroy();
                 make(center.getPosition().x, center.getPosition().y);
-                blob.destroy();
 
-                dir1.scl((float)1 / (border.size() + 1));
-
-                center.applyForce(dir1, center.getPosition(), true);
-                //Applies the force to every border thingy so the center doesn't fly out somewhere and leave the body behind
-                for(int test = 0; test < border.size(); test++)
-                    border.get(test).applyForce(dir1, border.get(test).getPosition(), true);
+                center.setLinearVelocity(velocity);
+                for (Body body : border)
+                    body.setLinearVelocity(velocity);
             }
         }
     }
 
     @Override
     public void draw() {
-        PolygonSprite poly;
-        PolygonSpriteBatch polyBatch;
-        Texture textureSolid;
-
-        Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pix.setColor(color);
-        pix.fill();
-        textureSolid = new Texture(pix);
-
         float[] vertices = new float[border.size() * 2];
         short[] triangles = new short[border.size() * 3];
 
@@ -201,10 +204,9 @@ public class Blob extends Entity {
         }
 
         PolygonRegion polyReg = new PolygonRegion(new TextureRegion(textureSolid), vertices, triangles);
-
         poly = new PolygonSprite(polyReg);
-        polyBatch = new PolygonSpriteBatch();
-        polyBatch.setProjectionMatrix(BattleBlobs.get().stage.camera.combined);
+
+        polyBatch.setProjectionMatrix(battlefield.camera.combined);
 
         polyBatch.begin();
         poly.draw(polyBatch);
@@ -217,12 +219,12 @@ public class Blob extends Entity {
     }
 
     public float radius() {
-        return (float) Math.pow(volume / (1.3333 * 3.1416), 0.3333);
+        return (float) Math.pow(area / (3.1415), 0.5);
     }
 
     @Override
     public int drawPriority() {
-        return (int) volume * 1000;
+        return (int) area * 1000;
     }
 
 }
