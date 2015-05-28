@@ -27,14 +27,13 @@ public class Battlefield extends Stage {
         camera = createCamera();
         debugger = new Box2DDebugRenderer(true, true, true, false, false, true);
 
-
         entities.add(new Background(this, width, height));
 
         entities.add(new Player(this));
         player = (Player) entities.get(entities.size() - 1);
 
+        entities.add(new AI(this, 3, 3, 0.1f, Color.BLACK));
 
-        entities.add(new Blob(this, 3, 3, 0.01f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
         entities.add(new UI(this));
 
 
