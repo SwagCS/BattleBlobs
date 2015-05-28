@@ -3,12 +3,10 @@ package net.avicus.battleblobs;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import net.avicus.battleblobs.entity.*;
-import net.avicus.battleblobs.utils.ControlUtils;
 
 import java.util.*;
 
@@ -21,7 +19,8 @@ public class Battlefield extends Stage {
     public final Box2DDebugRenderer debugger;
 
     public final List<Entity> entities = new ArrayList<Entity>();
-    public final Blob player;
+
+    public final Player player;
 
     public Battlefield(float width, float height) {
         world = new World(new Vector2(0, 0), true);
@@ -31,19 +30,22 @@ public class Battlefield extends Stage {
 
         entities.add(new Background(this, width, height));
 
-        player = new Blob(this, 1, 1, 0.3f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1));
+        entities.add(new Wall(this, 3, 3));
 
-        entities.add(player);
+        entities.add(new Player(this));
+        player = (Player) entities.get(entities.size() - 1);
+
+
         entities.add(new Blob(this, 3, 3, 0.01f, new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
         entities.add(new UI(this));
 
 
         Random rand = new Random();
 
-        int dots = 5;
+        int dots = 30;
 
         for (int i = 0; i < dots; i++)
-            entities.add(new Dot(this, rand.nextInt(3), rand.nextInt(3), new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
+            entities.add(new Dot(this, rand.nextInt(15), rand.nextInt(15), new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
 
 
 
@@ -70,25 +72,12 @@ public class Battlefield extends Stage {
         for (int i = 0; i < entities.size(); i++)
             entities.get(i).act(delta);
 
-        Vector2 dir = ControlUtils.getArrowKeyDirection();
-        dir.scl(0.1f);
-
-        player.center.applyForce(dir, player.center.getPosition(), true);
-        for (Body body : player.border)
-            body.applyForce(dir, body.getPosition(), true);
-
-        camera.position.set(player.getPosition().x, player.getPosition().y, 0f);
         camera.update();
     }
 
     @Override
     public void draw() {
         super.draw();
-
-        if (player.radius() > 1)
-            camera.zoom = (float) Math.sqrt((Math.sqrt(player.radius()))) * 1.5f;
-        else
-            camera.zoom = player.radius() * 1.5f;
 
         List<Entity> list = new ArrayList<Entity>();
         list.addAll(entities);
