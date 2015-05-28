@@ -30,8 +30,6 @@ public class Battlefield extends Stage {
 
         entities.add(new Background(this, width, height));
 
-        entities.add(new Wall(this, 3, 3));
-
         entities.add(new Player(this));
         player = (Player) entities.get(entities.size() - 1);
 
