@@ -13,7 +13,7 @@ public class AI extends Blob {
 
     private float time;
     private float last;
-
+    private Dot placeholder;
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -25,16 +25,35 @@ public class AI extends Blob {
 
         System.out.println(time);
 
-        float x = battlefield.player.getPosition().x - getPosition().x;
-        float y = battlefield.player.getPosition().y - getPosition().y;
+        if (this.radius() > Math.sqrt(battlefield.player.area()/3.14)) {
+            float x = battlefield.player.getPosition().x - getPosition().x;
+            float y = battlefield.player.getPosition().y - getPosition().y;
 
-        Vector2 dir = new Vector2(x, y);
-        dir.nor();
-        dir.scl(5);
+            Vector2 dir = new Vector2(x, y);
+            dir.nor();
+            dir.scl(5);
 
         for (Body body : border)
             body.setLinearVelocity(dir);
-        center.setLinearVelocity(dir);
+        center.setLinearVelocity(dir);}
+        else {
+                float dist = 1000000000000000f;
+                for(int i = 0; i<battlefield.entities.size(); i++) {
+                if(battlefield.entities.get(i) instanceof Dot && this.distance(battlefield.entities.get(i)) < dist){
+                    placeholder = (Dot)battlefield.entities.get(i);
+                    dist = this.distance(placeholder);
+
+                }
+                }
+            float x = placeholder.getPosition().x - getPosition().x;
+            float y = placeholder.getPosition().y - getPosition().y;
+            Vector2 dir = new Vector2(x,y);
+            dir.nor();
+            dir.scl(5);
+
+            for (Body body : border)
+                body.setLinearVelocity(dir);
+            center.setLinearVelocity(dir);}
     }
 
 }
