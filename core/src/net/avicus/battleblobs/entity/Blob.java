@@ -167,7 +167,7 @@ public class Blob extends Entity {
             double dist = distance(blob);
 
 
-            if (dist < radius) {
+            if (dist < radius && this.radius() > blob.radius()) {
                 Vector2 velocity = center.getLinearVelocity();
 
                 blob.destroy();

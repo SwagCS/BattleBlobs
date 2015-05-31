@@ -33,7 +33,7 @@ public class Battlefield extends Stage {
         player = (Player) entities.get(entities.size() - 1);
 
         entities.add(new AI(this, 3, 3, 0.1f, Color.BLACK));
-
+        entities.add(new AI(this, 4, 4, 0.1f, Color.RED));
         entities.add(new UI(this));
 
 
