@@ -14,10 +14,12 @@ public class AI extends Blob {
     private float time;
     private float last;
     private Blob placeholderBlob;
+    private float timeSinceEscapeStart = 2;
     @Override
     public void act(float delta) {
         super.act(delta);
 
+        timeSinceEscapeStart += delta;
         time += delta;
         if (time - last < 0.3)
             return;
@@ -37,9 +39,10 @@ public class AI extends Blob {
                 x = placeholderBlob.getPosition().x - getPosition().x;
                 y = placeholderBlob.getPosition().y - getPosition().y;
                 dir = new Vector2(-x,-y);
+                timeSinceEscapeStart = 0;
             }
            //eat the closest thing smaller than it
-           else  if(battlefield.entities.get(i) instanceof Blob && (Math.sqrt(((Blob) battlefield.entities.get(i)).area/3.14)) < this.radius() && this.distance(battlefield.entities.get(i)) < dist) {
+           else  if(battlefield.entities.get(i) instanceof Blob && (Math.sqrt(((Blob) battlefield.entities.get(i)).area/3.14)) < this.radius() && this.distance(battlefield.entities.get(i)) < dist && timeSinceEscapeStart > .1) {
                 placeholderBlob = (Blob) battlefield.entities.get(i);
                 dist = this.distance(placeholderBlob);
                 x = placeholderBlob.getPosition().x - getPosition().x;
@@ -50,7 +53,7 @@ public class AI extends Blob {
         }
 
         dir.nor();
-        dir.scl((float)(2/Math.sqrt(this.area/3.14)));
+        dir.scl((float)(3/Math.sqrt(this.area/3.14)));
 
         for(Body body : border)
             body.setLinearVelocity(dir);
