@@ -25,7 +25,7 @@ public class Player extends Entity {
     @Override
     public void act(float delta) {
         Vector2 dir = ControlUtils.getArrowKeyDirection();
-        dir.scl(0.1f);
+        dir.scl(0.05f);
 
         for (Blob blob : blobs) {
             blob.center.applyForce(dir, blob.center.getPosition(), true);

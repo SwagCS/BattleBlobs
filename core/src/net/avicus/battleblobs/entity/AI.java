@@ -31,6 +31,7 @@ public class AI extends Blob {
         Vector2 dir = new Vector2(0,0);
         float x, y;
 
+
         for(int i = 0; i < battlefield.entities.size(); i++) {
             //if something is bigger and close run away
             //only works when there is nothings smaller than it

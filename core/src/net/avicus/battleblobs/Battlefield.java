@@ -43,7 +43,7 @@ public class Battlefield extends Stage {
 
         for(int i = 0; i < ai; i++) {
             color = new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1);
-            entities.add(new AI(this, rand.nextInt(20), rand.nextInt(20), 0.1f, color));
+            entities.add(new AI(this, rand.nextInt(20), rand.nextInt(20), (float)Math.random()*1f, color));
         }
         entities.add(new UI(this));
 
