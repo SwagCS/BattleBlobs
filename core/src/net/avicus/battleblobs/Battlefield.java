@@ -22,8 +22,6 @@ public class Battlefield extends Stage {
 
     public final Player player;
 
-    private Color color;
-
     public Battlefield(float width, float height) {
         world = new World(new Vector2(0, 0), true);
         camera = createCamera();
@@ -41,16 +39,16 @@ public class Battlefield extends Stage {
 
         Random rand = new Random();
 
-        int ai = 100;
+        int ai = 60;
 
         for(int i = 0; i < ai; i++) {
-            color = new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1);
+            Color color = new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1);
             entities.add(new AI(this, rand.nextInt((int) width), rand.nextInt((int) height), (float)Math.random()*1f, color));
         }
         entities.add(new UI(this));
 
 
-        int dots = 300;
+        int dots = 125;
 
         for (int i = 0; i < dots; i++)
             entities.add(new Dot(this, rand.nextInt((int) width), rand.nextInt((int) height), new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));

@@ -98,9 +98,6 @@ public class Blob extends Entity {
             shape.dispose();
 
             if (i == count - 1) {
-                if (border.size() == 0)
-                    continue;
-                
                 Body connect = border.get(0);
                 jointDef.initialize(connect, body, connect.getPosition(), body.getPosition());
                 world.createJoint(jointDef);
