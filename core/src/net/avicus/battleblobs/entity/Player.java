@@ -38,7 +38,8 @@ public class Player extends Entity {
         }
 
         Vector2 dir = ControlUtils.getArrowKeyDirection();
-        dir.scl(0.05f);
+        dir.scl((float)(5/Math.sqrt((blobs.get(0).area/3.14))));
+        dir.scl(.005f);
 
         for (Blob blob : blobs) {
             blob.center.applyForce(dir, blob.center.getPosition(), true);

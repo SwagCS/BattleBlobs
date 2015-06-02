@@ -39,19 +39,19 @@ public class Battlefield extends Stage {
 
         Random rand = new Random();
 
-        int ai = 60;
+        int ai = 30;
 
         for(int i = 0; i < ai; i++) {
             Color color = new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1);
-            entities.add(new AI(this, rand.nextInt((int) width), rand.nextInt((int) height), (float)Math.random()*1f, color));
+            entities.add(new AI(this, rand.nextInt((31) ), rand.nextInt((31) ), (float)Math.random()*1f, color));
         }
         entities.add(new UI(this));
 
 
-        int dots = 125;
+        int dots = 500;
 
         for (int i = 0; i < dots; i++)
-            entities.add(new Dot(this, rand.nextInt((int) width), rand.nextInt((int) height), new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
+            entities.add(new Dot(this, rand.nextInt((31)), rand.nextInt((31)), new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
     }
 
     public float ppuX() {

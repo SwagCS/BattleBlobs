@@ -60,7 +60,7 @@ public class AI extends Blob {
         }
 
         dir.nor();
-        dir.scl((float)(3/Math.sqrt(this.area/3.14)));
+        dir.scl((float)(5/Math.cbrt(this.area/3.14)));
 
         for(Body body : border)
             body.setLinearVelocity(dir);
