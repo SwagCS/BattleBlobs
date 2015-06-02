@@ -26,8 +26,6 @@ public class AI extends Blob {
             return;
         last = time;
 
-        System.out.println(time);
-
         float dist = 1000000000000000f;
         Vector2 dir = new Vector2(0,0);
         float x, y;

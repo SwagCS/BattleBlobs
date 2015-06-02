@@ -34,6 +34,8 @@ public class Blob extends Entity {
     private PolygonSpriteBatch polyBatch;
     private Texture textureSolid;
 
+    public boolean destroyed;
+
     public Blob(Battlefield battlefield, float cx, float cy, float area, Color color) {
         super(battlefield);
 
@@ -44,10 +46,11 @@ public class Blob extends Entity {
     }
 
     public void make(float cx, float cy) {
+        destroyed = false;
         DistanceJointDef jointDef = new DistanceJointDef();
         jointDef.collideConnected = false;
-        jointDef.dampingRatio = 1f;
-        jointDef.frequencyHz = 3f;
+        jointDef.dampingRatio = 5f;
+        jointDef.frequencyHz = 6f;
 
         float circum = (float) (Math.PI * 2 * radius());
 
@@ -95,6 +98,9 @@ public class Blob extends Entity {
             shape.dispose();
 
             if (i == count - 1) {
+                if (border.size() == 0)
+                    continue;
+                
                 Body connect = border.get(0);
                 jointDef.initialize(connect, body, connect.getPosition(), body.getPosition());
                 world.createJoint(jointDef);
@@ -139,6 +145,7 @@ public class Blob extends Entity {
     }
 
     public void destroy() {
+        destroyed = true;
         if (center != null)
             world.destroyBody(center);
         for (Body body : border)

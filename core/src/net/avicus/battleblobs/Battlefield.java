@@ -12,7 +12,7 @@ import java.util.*;
 
 public class Battlefield extends Stage {
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     public final World world;
     public final OrthographicCamera camera;
@@ -31,30 +31,29 @@ public class Battlefield extends Stage {
 
         entities.add(new Background(this, width, height));
 
-        entities.add(new Player(this));
-        player = (Player) entities.get(entities.size() - 1);
+        entities.add(new Wall(this, 0, -0.64f, 0.32f * width, 0.32f));
+        entities.add(new Wall(this, -0.64f, 0, 0.32f, 0.32f * height));
+        entities.add(new Wall(this, 0, 2 * 0.315f * height, 0.32f * width, 0.32f));
+        entities.add(new Wall(this, 2 * 0.3125f * width, 0, 0.32f, 0.315f * height));
 
-        /*entities.add(new AI(this, 3, 3, 0.1f, Color.BLACK));
-        entities.add(new AI(this, 4, 4, 0.1f, Color.RED));*/
+        entities.add(new Player(this, width / 2.5f, height / 2.5f));
+        player = (Player) entities.get(entities.size() - 1);
 
         Random rand = new Random();
 
-        int ai = 8;
+        int ai = 100;
 
         for(int i = 0; i < ai; i++) {
             color = new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1);
-            entities.add(new AI(this, rand.nextInt(20), rand.nextInt(20), (float)Math.random()*1f, color));
+            entities.add(new AI(this, rand.nextInt((int) width), rand.nextInt((int) height), (float)Math.random()*1f, color));
         }
         entities.add(new UI(this));
 
 
-        int dots = 150;
+        int dots = 300;
 
         for (int i = 0; i < dots; i++)
-            entities.add(new Dot(this, rand.nextInt(20), rand.nextInt(20), new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
-
-
-
+            entities.add(new Dot(this, rand.nextInt((int) width), rand.nextInt((int) height), new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1)));
     }
 
     public float ppuX() {

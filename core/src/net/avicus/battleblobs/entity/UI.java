@@ -28,6 +28,8 @@ public class UI extends Entity {
         batch.begin();
         font.setColor(1, 153f/255f, 51f/255f, 1);
         font.draw(batch, "Score: " + (int) (battlefield.player.area() * 100), 23, 40);
+        if (battlefield.player.over)
+            font.draw(batch, "YOU LOSE! FINAL SCORE: " + (int) (battlefield.player.area() * 100), battlefield.getWidth() / 2.0f - 60, battlefield.getHeight() / 2.0f);
         batch.end();
     }
 

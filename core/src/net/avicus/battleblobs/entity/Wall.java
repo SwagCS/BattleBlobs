@@ -10,7 +10,7 @@ public class Wall extends Entity {
 
     private final Body body;
 
-    public Wall(Battlefield battlefield, float cx, float cy) {
+    public Wall(Battlefield battlefield, float x, float y, float width, float height) {
         super(battlefield);
 
         DistanceJointDef jointDef = new DistanceJointDef();
@@ -20,9 +20,9 @@ public class Wall extends Entity {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.StaticBody;
-        bodyDef.position.set(new Vector2(cx, cy));
+        bodyDef.position.set(new Vector2(x + width, y + height));
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(10, 10);
+        shape.setAsBox(width, height);
         body = world.createBody(bodyDef);
 
         FixtureDef fd = new FixtureDef();
